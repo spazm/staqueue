@@ -3,23 +3,23 @@ use Test::More;
 use_ok('queue_as_stack');
 
 my $q = queue_as_stack->new();
-is( $q->pop(), undef, 'undef when poping an empty queue' );
+is( $q->dequeue(), undef, 'undef when dequeue-ing an empty queue' );
 
-$q->push(1);
-is( $q->pop(), 1, 'push and pop a single value' );
+$q->enqueue(1);
+is( $q->dequeue(), 1, 'enqueue and dequeue a single value' );
 
-$q->push($_) for ( 1, 2, 3, 4 );
+$q->enqueue($_) for ( 1, 2, 3, 4 );
 
 #check internals
-is_deeply( $q->in_stack, [ 1, 2, 3, 4 ], 'all items pushed to in_stack' );
-is( $q->pop, 1, 'first item popped from queue' );
+is_deeply( $q->in_stack, [ 1, 2, 3, 4 ], 'all items enqueued to in_stack' );
+is( $q->dequeue, 1, 'first item dequeued from queue' );
 is_deeply(
     $q->out_stack,
     [ 4, 3, 2 ],
-    'all items pushed into out_stack in reverse order'
+    'all items enqueued into out_stack in reverse order'
 );
-is( $q->pop, 2, 'second item popped from queue' );
-is( $q->pop, 3, 'third item popped from queue' );
-is( $q->pop, 4, 'fourth item popped from queue' );
+is( $q->dequeue, 2, 'second item dequeued from queue' );
+is( $q->dequeue, 3, 'third item dequeued from queue' );
+is( $q->dequeue, 4, 'fourth item dequeued from queue' );
 
 done_testing;
