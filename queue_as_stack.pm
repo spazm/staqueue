@@ -1,5 +1,6 @@
 package queue_as_stack;
 
+use v5.12;
 use List::Util qw(min);
 
 =pod
@@ -11,10 +12,10 @@ queue_as_stack - an implementation of a queue using two stacks
 =head1 SYNOPSIS
 
     my $q = queue_as_stack->new();
-    $q->push(1);
-    $q->push(2);
-    $q->pop;  # returns 1
-    $q->pop;  # returns 2
+    $q->enqueue(1);
+    $q->enqueue(2);
+    $q->dequeue;  # returns 1
+    $q->dequeue;  # returns 2
 
 =head1 DESCRIPTION
 
@@ -32,6 +33,32 @@ O(2m) of temporary space is required for the two stacks if they don't dynamicall
 
 use Moo;
 use namespace::clean;
+
+=head1 OPTIONS
+
+=over 8
+
+=item show_visual
+
+flag to enable visualization.
+If non-zero, stack status will be shown during enqueue and dequeue operations.
+
+=item in_stack
+
+an arrayref to override the in_stack
+
+=item out_stack
+
+an arrayref to override the out_stack
+
+=back
+
+=cut
+
+has show_visual => (
+    is      => 'rw',
+    default => 0,
+);
 
 has in_stack => (
     is      => 'ro',
@@ -84,6 +111,7 @@ sub enqueue
         }
 
         push @{ $self->in_stack }, $value;
+        $self->show_stacks if $self->show_visual;
     }
 }
 
@@ -103,21 +131,24 @@ sub dequeue
         $self->_set__out_stack_min( $self->_in_stack_min );
         $self->_clear_in_stack_min;
 
+        $self->show_stacks if $self->show_visual;
+
         while ( @{ $self->in_stack } )
         {
 
             # copy in_stack minimum to out_stack here
             push( @{ $self->out_stack }, pop @{ $self->in_stack } );
+            $self->show_stacks if $self->show_visual;
         }
     }
 
     return undef if !@{ $self->out_stack };
 
     my $return = pop @{ $self->out_stack };
+    $self->show_stacks if $self->show_visual;
 
     if ( $self->_has_out_stack_min && $return <= $self->_out_stack_min )
     {
-        print STDERR "popping [$return] and clearing out_stack_min\n";
         $self->_clear_out_stack_min;
     }
 
@@ -149,6 +180,25 @@ sub getMinimum
     {
         return $out;
     }
+}
+
+=item show_stacks()
+
+Display the current state of the stacks.
+
+=cut
+
+sub show_stacks
+{
+    my $self = shift;
+
+    my @in  = @{ $self->in_stack };
+    my @out = @{ $self->out_stack };
+    say( "in:  ", join( ", ", @in ) );
+    say( "out: ", join( ", ", @out ) );
+
+    #    say ("queue: ", join(", ",@in,reverse(@out)));
+    say '';
 }
 
 =back

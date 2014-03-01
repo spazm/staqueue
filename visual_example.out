@@ -1,0 +1,86 @@
+empty stacks
+in:  
+out: 
+
+enqueue a value: 1
+in:  1
+out: 
+
+enqueue a value: 2
+in:  1, 2
+out: 
+
+enqueue a value: 3
+in:  1, 2, 3
+out: 
+
+enqueue a value: 4
+in:  1, 2, 3, 4
+out: 
+
+enqueue a value: 5
+in:  1, 2, 3, 4, 5
+out: 
+
+dequeue a value
+in:  1, 2, 3, 4, 5
+out: 
+
+in:  1, 2, 3, 4
+out: 5
+
+in:  1, 2, 3
+out: 5, 4
+
+in:  1, 2
+out: 5, 4, 3
+
+in:  1
+out: 5, 4, 3, 2
+
+in:  
+out: 5, 4, 3, 2, 1
+
+in:  
+out: 5, 4, 3, 2
+
+dequeue a second value
+in:  
+out: 5, 4, 3
+
+enqueue two more values, they will sit in in_stack
+in:  11
+out: 5, 4, 3
+
+in:  11, 12
+out: 5, 4, 3
+
+dequeue a third value, only pops out_stack
+in:  11, 12
+out: 5, 4
+
+dequeue a 4th value, only pops out_stack
+in:  11, 12
+out: 5
+
+dequeue a 5th value, pops final out_stack value
+in:  11, 12
+out: 
+
+next dequeue will move in_stack to out_stack
+in:  11, 12
+out: 
+
+in:  11
+out: 12
+
+in:  
+out: 12, 11
+
+in:  
+out: 12
+
+final dequeue
+in:  
+out: 
+
